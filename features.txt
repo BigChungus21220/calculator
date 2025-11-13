@@ -1,0 +1,41 @@
+minimum viable product
+- expressions
+- functions
+- scopes
+- algorithms
+- math characters
+
+other math features
+- variable decorators
+- user defined operators
+- redefinitions
+  - redefine any operator / variable to be anything
+- logical operators
+- sets, arrays, multisets, maps, bimaps
+- vectors, matrices
+- type checking
+  - f(x,y) = ... for x in R, y in Z
+- set builder notation
+  - can build finite sets & test against infinite sets (when possible)
+- reduction, mapping, loops
+- ticking
+- digit operations
+- strings / discrete data types
+- structs
+- signal processing (fft, convolution, etc)
+- stats
+
+renderers
+2d:
+- line graph
+- scatter
+- heightmap
+- fragment
+3d:
+- implicit surface / curve
+- explicit surface / curve
+- volumemetric
+
+colormaps
+materials
+- flat, shaded, colormap sampler

@@ -1,0 +1,13 @@
+setup auth / database
+- users
+  - has permissions to some graphs
+  - has a username
+  - has private graphs
+  - has salted password hash
+- graphs
+  - has an owner
+  - has global settings
+  - has a global scope
+    - has expressions
+      - have call methods
+      - have rendering settings

@@ -1,6 +1,12 @@
-<main style="width: 100%;" class="main">
-  
-  <canvas></canvas>
+<main class="main">
+  <p-splitter [style]="{ height: '100%' }" class="mb-8">
+    <ng-template #panel>
+      <p-button label="Check" />
+    </ng-template>
+    <ng-template #panel>
+      <c-graph/>
+    </ng-template>
+  </p-splitter>
 </main>
 
 <router-outlet/>

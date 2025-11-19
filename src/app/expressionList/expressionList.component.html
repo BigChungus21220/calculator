@@ -1,0 +1,14 @@
+<!-- Gonna have to cook this up myself bc their implmentation sucks ass -->
+<div>
+    @for (entry of entries; track entry){
+        <div class="c-expression-list-entry">
+            <div class="c-expression-list-style-panel"></div>
+            <div class="c-expression-list-expression-container">
+                <c-expression-edit-box [tex]=entry/>
+            </div>
+        </div>
+    }
+    <div class="c-expression-list-end">
+        <div class="c-expression-list-end-style-panel"></div>
+    </div>
+</div>

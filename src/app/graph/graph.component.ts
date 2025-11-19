@@ -1,11 +1,7 @@
-import { Component, ViewChild, ElementRef, AfterViewInit, OnDestroy, HostListener } from '@angular/core';
-
-/*
-todo: more ui, add some function drawing methods
-*/
-
+import { Component, ViewChild, ElementRef, AfterViewInit, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { Inject, PLATFORM_ID } from '@angular/core';
+import { ThemeService } from '../ThemeService';
 
 type tuple = [number, number];
 
@@ -15,8 +11,8 @@ type tuple = [number, number];
     templateUrl: './graph.component.html',
     styleUrl: './graph.component.scss'
 })
-export class GraphModule implements AfterViewInit, OnDestroy {
-    constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
+export class GraphModule implements AfterViewInit, OnDestroy, OnInit {
+    constructor(@Inject(PLATFORM_ID) private platformId: Object, private themeService: ThemeService) {}
 
     @ViewChild('graphCanvas') graphCanvas!: ElementRef;
     private resizeObserver!: ResizeObserver;
@@ -101,7 +97,8 @@ export class GraphModule implements AfterViewInit, OnDestroy {
     }
 
     redraw() : void {
-        this.ctx.fillStyle = "#FFFFFF";
+        const style = getComputedStyle(this.graphCanvas.nativeElement);
+        this.ctx.fillStyle = style.getPropertyValue('--graph-background-color');
         this.ctx.fillRect(0,0,this.res[0],this.res[1]);
 
         const base_scale = 250;
@@ -124,7 +121,7 @@ export class GraphModule implements AfterViewInit, OnDestroy {
         let n = Math.max(iend[0] - istart[0], iend[1] - istart[1])+2;
 
         // major ticks
-        this.ctx.strokeStyle = "#000000";
+        this.ctx.strokeStyle = style.getPropertyValue('--graph-line-color');
         this.ctx.lineWidth = 0.5;
         let positions = [];
         this.ctx.beginPath();
@@ -140,7 +137,7 @@ export class GraphModule implements AfterViewInit, OnDestroy {
         }
         this.ctx.stroke();
 
-        this.ctx.strokeStyle = "#4d4d4dff";
+        this.ctx.strokeStyle = style.getPropertyValue('--graph-thin-line-color');
         this.ctx.lineWidth = 0.25;
         // minor ticks
         positions.forEach((position) => {
@@ -156,6 +153,7 @@ export class GraphModule implements AfterViewInit, OnDestroy {
         this.ctx.stroke();
 
         // axies
+        this.ctx.strokeStyle = style.getPropertyValue('--graph-line-color');
         this.ctx.lineWidth = 1;
         this.ctx.beginPath();
         if (true){
@@ -167,22 +165,35 @@ export class GraphModule implements AfterViewInit, OnDestroy {
         this.ctx.stroke();
 
         // axis numbers
-        this.ctx.strokeStyle = "#FFFFFF";
+
+        // todo: snap to edge if axis goes off screen
+
+        this.ctx.strokeStyle = style.getPropertyValue('--graph-background-color');
         this.ctx.lineWidth = 4;
-        this.ctx.fillStyle = "#000000";
+        this.ctx.fillStyle = style.getPropertyValue('--graph-text-color');
         this.ctx.font = "11pt Arial"
         this.ctx.textAlign = 'center';
+        this.ctx.textBaseline = 'top';
+        positions.forEach((position) => {
+            if (position.coord_idx[0] == 0) return;
+            let text : string = this.toAxisString(position.coord_idx[0]*step[0], this.scale[0]);
+            this.ctx.strokeText(text, position.screen[0], screenOrigin[1] + 4);
+            this.ctx.fillText(text, position.screen[0], screenOrigin[1] + 4);
+        });
+
+        this.ctx.textAlign = 'right';
         this.ctx.textBaseline = 'middle';
         positions.forEach((position) => {
-            let text : [string,string] = [
-                this.toAxisString(position.coord_idx[0]*step[0], this.scale[0]), 
-                this.toAxisString(position.coord_idx[1]*step[1], this.scale[0])
-            ];
-            this.ctx.strokeText(text[0], position.screen[0], screenOrigin[1]);
-            this.ctx.fillText(text[0], position.screen[0], screenOrigin[1]);
-            this.ctx.strokeText(text[1], screenOrigin[0], position.screen[1]);
-            this.ctx.fillText(text[1], screenOrigin[0], position.screen[1]);
+            if (position.coord_idx[1] == 0) return;
+            let text : string = this.toAxisString(position.coord_idx[1]*step[1], this.scale[0]);
+            this.ctx.strokeText(text, screenOrigin[0] - 4, position.screen[1]);
+            this.ctx.fillText(text, screenOrigin[0] - 4, position.screen[1]);
         });
+
+        this.ctx.textAlign = 'right';
+        this.ctx.textBaseline = 'top';
+        this.ctx.strokeText('0', screenOrigin[0] - 4, screenOrigin[1] + 4);
+        this.ctx.fillText('0', screenOrigin[0] - 4, screenOrigin[1] + 4);
     }
 
     @HostListener('mousedown', ['$event'])
@@ -237,6 +248,14 @@ export class GraphModule implements AfterViewInit, OnDestroy {
         this.redraw();
     }
 
+    ngOnInit() {
+        if (!isPlatformBrowser(this.platformId)) return;
+
+        this.themeService.theme$.subscribe(mode => {
+            this.redraw();
+        });
+    }
+
     ngAfterViewInit() {
         if (!isPlatformBrowser(this.platformId)) return;
 
@@ -249,6 +268,7 @@ export class GraphModule implements AfterViewInit, OnDestroy {
                 this.redraw();
             }
         });
+        // need to run only on load
         this.resizeObserver.observe(this.graphCanvas.nativeElement);
         this.ctx = this.graphCanvas.nativeElement.getContext('2d');
     }

@@ -1,7 +1,24 @@
 <main class="main">
-  <p-splitter [style]="{ height: '100%' }" class="mb-8">
+  <div class="menubar">
+    <button class="menubar-icon-button">
+      <i class="ci ci-graphs"></i>
+    </button>
+    <div class="menubar-divider"></div>
+    <button class="menubar-icon-button">
+      <i class="pi pi-share-alt"></i>
+    </button>
+    <button class="menubar-icon-button">
+      <i class="pi pi-save"></i>
+    </button>
+    <input type="text" [value]=graphTitle class="menubar-graph-title"/>
+    <c-theme-toggle/>
+    <button class="menubar-icon-button">
+      <i class="pi pi-user"></i>
+    </button>
+  </div>
+  <p-splitter [panelSizes]="[25, 75]" style="height: calc(100vh - 50px);">
     <ng-template #panel>
-      <p-button label="Check" />
+      <c-expression-list/>
     </ng-template>
     <ng-template #panel>
       <c-graph/>

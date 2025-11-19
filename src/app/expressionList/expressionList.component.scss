@@ -1,0 +1,29 @@
+.c-expression-list-entry {
+    border-bottom: 1px solid var(--p-content-border-color);
+    display: flex;
+    overflow: hidden;
+}
+
+.c-expression-list-expression-container {
+    padding: 10px;
+    display: inline-block;
+}
+
+.c-expression-list-style-panel {
+    width: 50px;
+    min-width: 50px;
+    min-height: 50px;
+    border-right: 1px solid var(--p-content-border-color);
+}
+
+.c-expression-list-end-style-panel {
+    height: 50px;
+}
+
+.c-expression-list-end-style-panel {
+    border-right: 1px solid transparent; 
+    border-image: linear-gradient(var(--p-content-border-color), var(--p-content-background)); 
+    border-image-slice: 1; 
+    width: 50px;
+    min-width: 50px;
+}

@@ -1,0 +1,5 @@
+<p-toggleswitch [ngModel]="is_dark_mode" (ngModelChange)="setTheme();">
+<ng-template #handle let-checked="is_dark_mode">
+    <i [ngClass]="['!text-xs', 'pi', is_dark_mode ? 'pi-moon' : 'pi-sun']"></i>
+</ng-template>
+</p-toggleswitch>

@@ -1,6 +1,4 @@
 import { Component, Input, Inject, PLATFORM_ID, ElementRef, OnChanges } from '@angular/core';
-//import { LatexService } from '../math-jax.service';
-//import { DomSanitizer, SafeHtml } from "@angular/platform-browser";
 import { isPlatformBrowser } from '@angular/common';
 import katex from 'katex';
 

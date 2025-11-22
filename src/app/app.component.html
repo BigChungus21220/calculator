@@ -1,29 +1,36 @@
 <main class="main">
   <div class="menubar">
-    <button class="menubar-icon-button">
-      <i class="ci ci-graphs"></i>
-    </button>
-    <div class="menubar-divider"></div>
-    <button class="menubar-icon-button">
-      <i class="pi pi-share-alt"></i>
-    </button>
-    <button class="menubar-icon-button">
-      <i class="pi pi-save"></i>
-    </button>
-    <input type="text" [value]=graphTitle class="menubar-graph-title"/>
-    <c-theme-toggle/>
-    <button class="menubar-icon-button">
-      <i class="pi pi-user"></i>
-    </button>
+    <div class="menubar-left">
+      <button class="menubar-icon-button">
+        <i class="ci ci-graphs"></i>
+      </button>
+      <div class="menubar-divider"></div>
+      <button class="menubar-icon-button">
+        <i class="pi pi-share-alt"></i>
+      </button>
+      <button class="menubar-icon-button">
+        <i class="pi pi-save"></i>
+      </button>
+      <input type="text" [value]=graphTitle class="menubar-graph-title"/>
+    </div>
+    <div class="menubar-middle">
+      <h2 class="menubar-title">Calculator</h2>
+    </div>
+    <div class="menubar-right">
+      <c-theme-toggle/>
+      <button class="menubar-icon-button">
+        <i class="pi pi-user"></i>
+      </button>
+    </div>
   </div>
-  <p-splitter [panelSizes]="[25, 75]" style="height: calc(100vh - 50px);">
-    <ng-template #panel>
+  <c-split-pane [ratio]=0.25 class="body-panel">
+    <c-split-pane-left>
       <c-expression-list/>
-    </ng-template>
-    <ng-template #panel>
+    </c-split-pane-left>
+    <c-split-pane-right>
       <c-graph/>
-    </ng-template>
-  </p-splitter>
+    </c-split-pane-right>
+  </c-split-pane>
 </main>
 
 <router-outlet/>

@@ -1,5 +1,6 @@
-<p-toggleswitch [ngModel]="is_dark_mode" (ngModelChange)="setTheme();">
-<ng-template #handle let-checked="is_dark_mode">
-    <i [ngClass]="['!text-xs', 'pi', is_dark_mode ? 'pi-moon' : 'pi-sun']"></i>
-</ng-template>
-</p-toggleswitch>
+<label class="theme-toggle-base">
+    <input type="checkbox" [checked]=is_dark_mode (change)=setTheme() class="theme-toggle-checkbox">
+    <span [ngClass]="['theme-toggle-slider', is_dark_mode ? 'toggle-checked' : '']">
+        <i [ngClass]="['pi', is_dark_mode ? 'pi-moon' : 'pi-sun']"></i>
+    </span>
+</label>

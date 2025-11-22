@@ -1,9 +1,9 @@
-import { Component, ViewChild, ElementRef, AfterViewInit, OnInit, OnDestroy, HostListener } from '@angular/core';
+import { Inject, PLATFORM_ID, Component, ViewChild, ElementRef, AfterViewInit, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
-import { Inject, PLATFORM_ID } from '@angular/core';
 import { ThemeService } from '../ThemeService';
 
 type tuple = [number, number];
+type RenderingOptions = {color : string, linewidth : number};
 
 @Component({
     selector: 'c-graph',
@@ -22,6 +22,7 @@ export class GraphModule implements AfterViewInit, OnDestroy, OnInit {
     private print_accuracy = 6;
     private scale_min = -14;
     private scale_max = 14;
+    private samplePeriod = 4;
 
     // rendering resolution
     private res : tuple = [0,0];
@@ -96,7 +97,27 @@ export class GraphModule implements AfterViewInit, OnDestroy, OnInit {
         return str;
     }
 
+    // for regions, sample grid at sample period, refine at bondaries if needed
+
+    plot(func : (x: number) => number, renderingOptions : RenderingOptions) : void {
+        const xmin = this.toGraphCoords([0,this.res[1]])[0];
+        const xmax = this.toGraphCoords([this.res[0],0])[0];
+        const sampleres = Math.ceil(this.res[0]/this.samplePeriod);
+
+        this.ctx.beginPath();
+        this.ctx.strokeStyle = renderingOptions.color;
+        this.ctx.lineWidth = renderingOptions.linewidth;
+        for (let i = 0; i < sampleres; i++){
+            let x = (i/sampleres)*(xmax - xmin) + xmin;
+            let p = this.toScreenCoords([x,func(x)]);
+            this.ctx.lineTo(p[0],p[1]);
+        }
+        this.ctx.stroke();
+    }
+
     redraw() : void {
+        if (!this.graphCanvas) return;
+
         const style = getComputedStyle(this.graphCanvas.nativeElement);
         this.ctx.fillStyle = style.getPropertyValue('--graph-background-color');
         this.ctx.fillRect(0,0,this.res[0],this.res[1]);
@@ -194,6 +215,10 @@ export class GraphModule implements AfterViewInit, OnDestroy, OnInit {
         this.ctx.textBaseline = 'top';
         this.ctx.strokeText('0', screenOrigin[0] - 4, screenOrigin[1] + 4);
         this.ctx.fillText('0', screenOrigin[0] - 4, screenOrigin[1] + 4);
+
+        // lines
+        this.plot((x) => x*x, {color:"#1bef49ff", linewidth:3});
+        this.plot((x) => Math.sin(x), {color:"#ff3414ff", linewidth:3});
     }
 
     @HostListener('mousedown', ['$event'])
@@ -202,13 +227,13 @@ export class GraphModule implements AfterViewInit, OnDestroy, OnInit {
         this.isdragging = true;
     }
 
-    @HostListener('document:mouseup')
+    @HostListener('window:mouseup')
     onMouseUp() {
         this.isdragging = false;
     }
 
     // pan action
-    @HostListener('mousemove', ['$event'])
+    @HostListener('window:mousemove', ['$event'])
     onMouseMove(event: MouseEvent) {
         if (this.isdragging){
             const delta = [2*event.movementX/this.res[0], -2*event.movementY/this.res[0]];

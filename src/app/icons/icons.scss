@@ -1,5 +1,8 @@
 @font-face {
     font-family: 'calcicons';
+    -webkit-user-select: none;
+    user-select: none;
+    
     src: url('./icons.eot');
     src: url('./icons.eot?#iefix') format('embedded-opentype'),
          url('./icons.woff') format('woff'),

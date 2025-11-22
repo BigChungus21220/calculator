@@ -1,13 +1,11 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import { ThemeService } from '../ThemeService';
 
 @Component({
   selector: 'c-theme-toggle',
   imports: [
-    ToggleSwitchModule,
     CommonModule,
     FormsModule
   ],

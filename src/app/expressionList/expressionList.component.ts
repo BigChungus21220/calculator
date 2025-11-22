@@ -1,11 +1,9 @@
 import { Component } from '@angular/core';
-import { PanelModule } from 'primeng/panel';
 import { ExpressionEditBoxComponent } from '../expressionEditBox/expressionEditBox.component';
 
 @Component({
   selector: 'c-expression-list',
   imports: [
-    PanelModule,
     ExpressionEditBoxComponent
   ],
   templateUrl: './expressionList.component.html',

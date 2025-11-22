@@ -1,8 +1,49 @@
-:host p-toggleswitch {
-    --p-toggleswitch-width: 50px;
-    --p-toggleswitch-height: 30px;
-    --p-toggleswitch-border-radius: 7px;
-    --p-toggleswitch-handle-border-radius: 5px;
-    --p-toggleswitch-handle-size: 25px;
-    --p-toggleswitch-gap: 3px;
+.theme-toggle-checkbox {
+    display: none;
+}
+
+.theme-toggle-base {
+    width: 60px;
+    height: 35px;
+    display: grid;
+    align-items: center;
+    border: 1px solid var(--p-content-border-color);
+    border-radius: var(--p-content-border-radius);
+
+    transition: border-color 0.1s ease-in-out;
+
+    span {
+        max-width: max-content;
+        max-height: max-content;
+        padding: 5px;
+        margin-left: 3px;
+        margin-right: 3px;
+        aspect-ratio: 1;
+        background-color: var(--p-content-background);
+        border-radius: var(--p-content-border-radius);
+        border: 1px solid var(--p-content-border-color);
+        transform: translate(0, 0);
+
+        transition: 
+        background-color 0.1s ease-in-out, 
+        border-color 0.1s ease-in-out, 
+        transform 0.1s ease-in-out;
+
+        i {
+            font-size:large;
+        }
+
+        &.toggle-checked {
+            transform: translate(25px, 0);
+            border-right: none;
+        }
+    }
+
+    &:hover {
+        border-color: var(--p-form-field-border-color);
+        span {
+            background-color: var(--p-content-hover-background);
+            border-color: var(--p-form-field-border-color);
+        }
+    }
 }

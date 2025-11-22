@@ -11,3 +11,13 @@ setup auth / database
     - has expressions
       - have call methods
       - have rendering settings
+
+
+style icons
+- range / animated range
+- show/hide visual
+  - line
+  - parameterized line
+  - region
+- value
+- run / pause ticking
